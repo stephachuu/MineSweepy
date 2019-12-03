@@ -10,8 +10,8 @@ public class MineBoard : MonoBehaviour
     public int columns;
     public int mineCount;
 
-    public VerticalLayoutGroup board;
-    public HorizontalLayoutGroup panelRow;
+    public GridLayoutGroup board;
+    public RectTransform panelRow;
     public Tile tilePrefab;
 
     public Text messageText;
@@ -50,17 +50,23 @@ public class MineBoard : MonoBehaviour
 
     public void GenerateBoard()
     {
+        float tileWidth = board.GetComponent<RectTransform>().sizeDelta.x / columns;
+        float tileHeight = board.GetComponent<RectTransform>().sizeDelta.y / rows;
+        float cellSize = Mathf.Min(tileWidth, tileHeight);
+
+        board.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+        board.constraintCount = rows;
+        board.cellSize = new Vector2(cellSize, cellSize);
+
         for (int rowIndex = 0; rowIndex < rows; rowIndex++)
         {
-            HorizontalLayoutGroup rowParent = (HorizontalLayoutGroup)Instantiate(panelRow);
-            rowParent.transform.SetParent(board.transform);
-
             _tileDictionary.Add(rowIndex, new List<Tile>());
 
             for (int columnIndex = 0; columnIndex < columns; columnIndex++)
             {
                 Tile tile = (Tile)Instantiate(tilePrefab);
-                tile.transform.SetParent(rowParent.transform);
+                tile.transform.SetParent(board.transform);
+                tile.transform.localScale = Vector3.one;
                 tile.Init(this, rowIndex, columnIndex);
 
                 _tileDictionary[rowIndex].Add(tile);
@@ -76,12 +82,6 @@ public class MineBoard : MonoBehaviour
         }
 
         _tileDictionary.Clear();
-    }
-
-    public void AdjustSpacing()
-    {
-        Tile tile = _tileDictionary[0][0];
-        //float height = tile.rec
     }
 
     private void AddMines()
@@ -149,7 +149,7 @@ public class MineBoard : MonoBehaviour
                 Tile currentTile = _tileDictionary[row][col];
                 if (!currentTile.Revealed)
                 {
-                    currentTile.RevealTile();
+                    currentTile.RevealTile(true);
                 }
             }
         }

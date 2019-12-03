@@ -16,10 +16,13 @@ public class Tile : MonoBehaviour
     public Image tileImage;
     public Image flaggedImage;
     public Image mineImage;
+    public Image xImage;
     public ClickableObject clickableObject;
 
     public Sprite hiddenSprite;
     public Sprite revealedSprite;
+
+    public List<Color> numberColors;
 
     public int RowNumber  { get; set; }
     public int ColumnNumber { get; set; }
@@ -46,6 +49,7 @@ public class Tile : MonoBehaviour
         mineCountText.gameObject.SetActive(false);
         flaggedImage.gameObject.SetActive(false);
         mineImage.gameObject.SetActive(false);
+        xImage.gameObject.SetActive(false);
 
         tileImage.sprite = hiddenSprite;
     }
@@ -65,7 +69,7 @@ public class Tile : MonoBehaviour
         _mineCheckCount++;
     }
 
-    public void RevealTile()
+    public void RevealTile(bool gameOver = false)
     {
         Revealed = true;
         tileImage.sprite = revealedSprite;
@@ -76,21 +80,41 @@ public class Tile : MonoBehaviour
 
         if (Flagged)
         {
-            Flagged = false;
-            flaggedImage.gameObject.SetActive(false);
-            _parentBoard.UpdateFlaggedCount(false);
+            if (gameOver)
+            {
+                if (Type != TileType.Mine)
+                {
+                    xImage.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                Flagged = false;
+                flaggedImage.gameObject.SetActive(false);
+                _parentBoard.UpdateFlaggedCount(false);
+            }
         }
 
-        if (Type == TileType.Numbered)
+        if (Type == TileType.Numbered && !Flagged)
         { 
             mineCountText.gameObject.SetActive(true);
             mineCountText.text = _mineCheckCount.ToString();
+            mineCountText.color = GetNumberColor(_mineCheckCount);
         }
-        // Should only do this one if game over;
-        else if (Type == TileType.Mine)
+        else if (Type == TileType.Mine && gameOver)
         {
             mineImage.gameObject.SetActive(true);
         }
+    }
+
+    public Color GetNumberColor(int value)
+    {
+        if (numberColors != null && value > 0 && numberColors.Count >= value)
+        {
+            return numberColors[value - 1];
+        }
+
+        return Color.black;
     }
 
     
