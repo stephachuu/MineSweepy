@@ -190,17 +190,17 @@ PrefabInstance:
     - target: {fileID: 6687200387656958739, guid: d25ce00e5bf1c9042b7ab0e57c6ed94d,
         type: 3}
       propertyPath: mineCount
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6687200387656958739, guid: d25ce00e5bf1c9042b7ab0e57c6ed94d,
         type: 3}
       propertyPath: rows
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6687200387656958739, guid: d25ce00e5bf1c9042b7ab0e57c6ed94d,
         type: 3}
       propertyPath: columns
-      value: 3
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d25ce00e5bf1c9042b7ab0e57c6ed94d, type: 3}
