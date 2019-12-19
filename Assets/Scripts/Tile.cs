@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public enum TileType
 
 public class Tile : MonoBehaviour
 {
-    public Text mineCountText;
+    public TextMeshProUGUI mineCountText;
     public Image tileImage;
     public Image flaggedImage;
     public Image mineImage;

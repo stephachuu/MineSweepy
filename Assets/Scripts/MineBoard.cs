@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MineBoard : MonoBehaviour
 {
-    public int rows;
-    public int columns;
-    public int mineCount;
+    public int rows = 2;
+    public int columns = 2;
+    public int mineCount = 1;
 
-    public GridLayoutGroup board;
-    public RectTransform panelRow;
-    public Tile tilePrefab;
+    public GridLayoutGroup board = null;
+    public Tile tilePrefab = null;
 
-    public Text messageText;
-    public Text flagCountText;
-    public Button gameStartButton;
+    public TextMeshProUGUI messageText = null;
+    public TextMeshProUGUI flagCountText = null;
+    public Button gameStartButton = null;
+    public Timer timer = null;
 
     // key = rows, value index = columns
     private Dictionary<int, List<Tile>> _tileDictionary = new Dictionary<int, List<Tile>>();
@@ -24,8 +25,6 @@ public class MineBoard : MonoBehaviour
     private int _revealedTileCount = 0;
     private int _usedFlagCount = 0;
     private bool _lostGame = false;
-
-    private const float SPACING = 5f;
 
     public void InitBoard()
     {
@@ -39,6 +38,7 @@ public class MineBoard : MonoBehaviour
         GenerateBoard();
         AddMines();
 
+        timer.StartTimer();
         messageText.text = String.Empty;
         flagCountText.text = mineCount.ToString();
         gameStartButton.gameObject.SetActive(false);
@@ -126,6 +126,7 @@ public class MineBoard : MonoBehaviour
 
     private void WinGameEnd()
     {
+        timer.StopTimer();
         messageText.text = "YAAAAY!!! YOU WIN!";
         gameStartButton.gameObject.SetActive(true);
     }
@@ -154,6 +155,7 @@ public class MineBoard : MonoBehaviour
             }
         }
 
+        timer.StopTimer();
         messageText.text = "womp womp you looooooose...";
         gameStartButton.gameObject.SetActive(true);
     }
